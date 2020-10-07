@@ -1,0 +1,34 @@
+version: "3"
+services:
+  app:
+    container_name: doodoop-api
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "3000:3000"
+    volumes:
+     - .:/app
+     - /app/node_modules
+    depends_on:
+      - db
+      - transpiler
+    env_file: .env
+    command: sh -c "nodemon --delay 500ms ./dist/server.js"
+
+  db:
+    image: postgres:13.0
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  transpiler:
+    build: .
+    volumes:
+     - .:/app
+     - /app/node_modules
+    command: ["tsc", "-w"]
+
+volumes:
+  pgdata:
