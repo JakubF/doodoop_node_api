@@ -14,8 +14,8 @@ const mappings = [
   { attribute: 'enterCode', operator: Op.eq },
 ];
 const includes = [
-  { model: models.RoundElement, required: false },
-  { model: models.Player, required: false },
+  { model: models.RoundElement, required: false, as: 'roundElements' },
+  { model: models.Player, required: false, as: 'players' },
 ];
 const resolver = queryResolver(models.GameSession, mappings, includes);
 const mutations = {
