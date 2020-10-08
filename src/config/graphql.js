@@ -22,7 +22,6 @@ const doodoopSchema = buildSchema(`
     }
 `);
 // Create an express server and a GraphQL endpoint
-console.log(root)
 const graphql = graphqlHTTP({
   schema: doodoopSchema,
   rootValue: root,
