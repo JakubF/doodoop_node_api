@@ -6,7 +6,7 @@ RUN mkdir /app
 
 WORKDIR /app
 
-RUN npm install -g nodemon typescript
+RUN npm install -g nodemon typescript sequelize-cli
 
 COPY package*.json ./
 RUN npm install
@@ -14,4 +14,4 @@ RUN npm install
 COPY . .
 
 EXPOSE 3000
-CMD ["nodemon", "./dist/app/server.js"]
+CMD ["nodemon", "./dist/server.js"]
