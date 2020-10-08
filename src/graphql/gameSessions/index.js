@@ -3,6 +3,7 @@ import queryResolver from '../resolver';
 import models from '../../models';
 import { Op } from 'sequelize';
 import create from '../../services/gameSessions/create';
+import update from '../../services/gameSessions/update';
 
 const mappings = [
   { attribute: 'id', operator: Op.eq },
@@ -13,6 +14,7 @@ const mappings = [
 const resolver = queryResolver(models.GameSession, mappings);
 const mutations = {
   create,
+  update,
 };
 
 export {

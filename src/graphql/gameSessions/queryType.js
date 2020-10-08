@@ -9,6 +9,7 @@ const schema = `
 
   type GameSessionMutations {
     create(name: String!): GameSessions
+    update(id: Int!, name: String!): GameSessions
   }
 `;
 
