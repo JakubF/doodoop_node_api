@@ -8,6 +8,7 @@ const root = {};
 Object.keys(doodoopGraphql).forEach((resourceName) => {
   schema = `${schema}\n${doodoopGraphql[resourceName].schema}`;
   root[resourceName] = doodoopGraphql[resourceName].resolver;
+  root[`${resourceName}Mutations`] = doodoopGraphql[resourceName].mutations;
 });
 const doodoopSchema = buildSchema(`
     ${schema}
@@ -16,8 +17,12 @@ const doodoopSchema = buildSchema(`
         gameSessions(id: Int, name: String, status: String, enterCode: String): [GameSessions],
         roundElements(id: Int, name: String, status: String, answer: String, points: Int, gameSessionId: Int): [RoundElements],
     }
+    type Mutation {
+      gameSessionsMutations: GameSessionMutations
+    }
 `);
 // Create an express server and a GraphQL endpoint
+console.log(root)
 const graphql = graphqlHTTP({
   schema: doodoopSchema,
   rootValue: root,
