@@ -1,5 +1,5 @@
-const resolver = (model, mappings) => {
-  return (args = {}) => {
+const resolver = (model, mappings, includes = []) => {
+  return (args = {}, rest = undefined) => {
     const requestedKeys = Object.keys(args);
     const query = mappings.reduce((accumulator, mapping) => {
       if(requestedKeys.includes(mapping.attribute)) {
@@ -9,9 +9,9 @@ const resolver = (model, mappings) => {
     }, {});
 
     if(Object.keys(query).length > 0)
-      return model.findAll({ where: query });
+      return model.findAll({ where: query, include: includes });
     else
-      return model.findAll()
+      return model.findAll({ include: includes })
   }
 };
 
