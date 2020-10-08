@@ -10,7 +10,7 @@ const service = async ({ id, name }) => {
     return record
   await validateName(GameSession, name);
 
-  return await record.update({ name, updatedAt: new Date() })
+  return await record.update({ name, updatedAt: new Date() });
 };
 
 export default service;
