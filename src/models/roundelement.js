@@ -5,7 +5,7 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class RoundElement extends Model {
     static associate(models) {
-      RoundElement.belongsTo(models.GameSession);
+      RoundElement.belongsTo(models.GameSession, { foreignKey: 'gameSessionId', as: 'gameSession' });
     }
   };
   RoundElement.init({
