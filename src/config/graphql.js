@@ -21,6 +21,7 @@ const doodoopSchema = buildSchema(`
     type Mutation {
       gameSessionsMutations: GameSessionMutations,
       roundElementsMutations: RoundElementMutations,
+      answersMutations: AnswerMutations,
     }
 `);
 // Create an express server and a GraphQL endpoint

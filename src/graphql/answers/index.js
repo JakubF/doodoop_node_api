@@ -2,6 +2,7 @@ import schema from './queryType';
 import queryResolver from '../resolver';
 import models from '../../models';
 import { Op } from 'sequelize';
+import create from '../../services/gameSessions/create';
 
 const mappings = [
   { attribute: 'id', operator: Op.eq },
@@ -13,9 +14,12 @@ const includes = [
   { model: models.RoundElement, required: false, as: 'roundElement' },
 ];
 const resolver = queryResolver(models.Player, mappings, includes);
-
+const mutations = {
+  create,
+};
 export {
   resolver,
   schema,
   mappings,
+  mutations,
 };
