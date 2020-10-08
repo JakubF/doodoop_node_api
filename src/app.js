@@ -6,6 +6,7 @@ import './config/environment';
 import graphql from './config/graphql';
 import models from './models';
 import handleErrors from './middleware/handleErrors';
+import broadcastEvent from './utils/broadcastEvent';
 import { UnprocessableEntity } from './utils/errors';
 
 const app = express();
@@ -33,7 +34,7 @@ app.use(
 );
 app.use('/graphql', graphql);
 app.get('/game_sessions', (req, res) => {
-  throw new UnprocessableEntity({ name: 'too long' });
+  broadcastEvent("test", { dupa: 'xd' });
   models.GameSession.findAll().then((gs) => res.end(JSON.stringify(gs)))
 });
 app.use(handleErrors)
