@@ -1,18 +1,25 @@
 import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'graphql';
+import doodoopGraphql from '../graphql';
+
+let schema = '';
+const root = {};
 // GraphQL schema
-const schema = buildSchema(`
+Object.keys(doodoopGraphql).forEach((resourceName) => {
+  schema = `${schema}\n${doodoopGraphql[resourceName].schema}`;
+  root[resourceName] = doodoopGraphql[resourceName].resolver;
+});
+const doodoopSchema = buildSchema(`
+    ${schema}
     type Query {
-        message: String
+        message: String,
+        gameSessions(id: Int, name: String, status: String, enterCode: String): [GameSessions],
+        roundElements(id: Int, name: String, status: String, answer: String, points: Int, gameSessionId: Int): [RoundElements],
     }
 `);
-// Root resolver
-const root = {
-  message: () => 'Hello World!'
-};
 // Create an express server and a GraphQL endpoint
 const graphql = graphqlHTTP({
-  schema: schema,
+  schema: doodoopSchema,
   rootValue: root,
   graphiql: true
 })
