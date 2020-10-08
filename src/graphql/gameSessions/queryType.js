@@ -4,7 +4,9 @@ const schema = `
     enterCode: String,
     status: String,
     id: Int,
-    roundElements: [RoundElements]
+    roundElements: [RoundElements],
+    currentRoundElement: RoundElements,
+    players: [Players],
   }
 
   type GameSessionMutations {
