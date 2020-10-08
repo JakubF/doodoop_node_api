@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   class GameSession extends Model {
     static associate(models) {
       GameSession.hasMany(models.RoundElement);
+      GameSession.hasMany(models.Player);
     }
   };
   GameSession.init({
