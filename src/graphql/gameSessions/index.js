@@ -5,6 +5,7 @@ import { Op } from 'sequelize';
 import create from '../../services/gameSessions/create';
 import update from '../../services/gameSessions/update';
 import start from '../../services/gameSessions/start';
+import join from '../../services/gameSessions/join';
 
 const mappings = [
   { attribute: 'id', operator: Op.eq },
@@ -12,11 +13,16 @@ const mappings = [
   { attribute: 'status', operator: Op.eq },
   { attribute: 'enterCode', operator: Op.eq },
 ];
-const resolver = queryResolver(models.GameSession, mappings);
+const includes = [
+  { model: models.RoundElement, required: false },
+  { model: models.Player, required: false },
+];
+const resolver = queryResolver(models.GameSession, mappings, includes);
 const mutations = {
   create,
   update,
   start,
+  join,
 };
 
 export {
