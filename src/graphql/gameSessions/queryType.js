@@ -10,7 +10,8 @@ const schema = `
   type GameSessionMutations {
     create(name: String!): GameSessions,
     update(id: Int!, name: String!): GameSessions,
-    start(id: Int!): GameSessions
+    start(id: Int!): GameSessions,
+    join(enterCode: String!, name: String!): Players
   }
 `;
 
