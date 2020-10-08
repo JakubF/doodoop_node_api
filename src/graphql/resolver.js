@@ -9,9 +9,9 @@ const resolver = (model, mappings, includes = []) => {
     }, {});
 
     if(Object.keys(query).length > 0)
-      return model.findAll({ where: query, include: includes });
+      return model.findAll({ where: query, include: includes, order: [['id', 'ASC']] });
     else
-      return model.findAll({ include: includes })
+      return model.findAll({ include: includes, order: [['id', 'ASC']] })
   }
 };
 
