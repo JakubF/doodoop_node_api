@@ -8,6 +8,7 @@ const service = async ({ id, name }) => {
     throw new NotFound(`Record with id ${id} not found.`)
   if (name === record.name)
     return record
+  await validateName(GameSession, name);
 
   return await record.update({ name, updatedAt: new Date() })
 };
