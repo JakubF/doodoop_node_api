@@ -7,9 +7,8 @@ const gameSession = async (record) => {
     order: [['id', 'ASC']],
     include: [{ model: Answer, required: false, as: 'answers' },]
   })
-  console.log("currentRoundElement", currentRoundElement)
  return {
-   currentRoundElement: currentRoundElement.dataValues
+   currentRoundElement
  }
 }
 

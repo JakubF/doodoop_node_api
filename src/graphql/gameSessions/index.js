@@ -2,12 +2,13 @@ import schema from './queryType';
 import queryResolver from '../resolver';
 import models from '../../models';
 import { Op } from 'sequelize';
+import gameSessionEntity from '../../entities/gameSession';
+import entityWrapper from '../../utils/entityWrapper';
 import create from '../../services/gameSessions/create';
 import update from '../../services/gameSessions/update';
 import start from '../../services/gameSessions/start';
 import join from '../../services/gameSessions/join';
-import gameSessionEntity from '../../entities/gameSession';
-import entityWrapper from '../../utils/entityWrapper';
+import startNextSong from '../../services/gameSessions/startNextSong';
 
 const mappings = [
   { attribute: 'id', operator: Op.eq },
@@ -29,6 +30,7 @@ const mutations = {
   update,
   start,
   join,
+  startNextSong,
 };
 
 export {

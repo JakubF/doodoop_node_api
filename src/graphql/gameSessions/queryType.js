@@ -13,6 +13,7 @@ const schema = `
     create(name: String!): GameSessions,
     update(id: Int!, name: String!): GameSessions,
     start(id: Int!): GameSessions,
+    startNextSong(id: Int!): RoundElements,
     join(enterCode: String!, name: String!): Players
   }
 `;
