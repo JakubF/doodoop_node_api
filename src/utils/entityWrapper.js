@@ -9,4 +9,7 @@ const entitiesWrapper = async (collection, entityFunction) => {
     return entityWrapper(record, entityFunction)
   })
 }
-export default entitiesWrapper;
+export {
+  entitiesWrapper,
+  entityWrapper,
+}

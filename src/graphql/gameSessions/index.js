@@ -3,7 +3,7 @@ import queryResolver from '../resolver';
 import models from '../../models';
 import { Op } from 'sequelize';
 import gameSessionEntity from '../../entities/gameSession';
-import entityWrapper from '../../utils/entityWrapper';
+import { entitiesWrapper } from '../../utils/entityWrapper';
 import create from '../../services/gameSessions/create';
 import update from '../../services/gameSessions/update';
 import start from '../../services/gameSessions/start';
@@ -23,7 +23,7 @@ const includes = [
 const baseResolver = queryResolver(models.GameSession, mappings, includes);
 const resolver = async (args, context) => {
   const results = await baseResolver(args, context);
-  return entityWrapper(results, gameSessionEntity);
+  return entitiesWrapper(results, gameSessionEntity);
 };
 const mutations = {
   create,
