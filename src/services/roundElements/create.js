@@ -1,5 +1,5 @@
 import { GameSession, RoundElement } from '../../models';
-import validateName from '../validations/validateName';
+import validateSize from '../validations/validateSize';
 import validateUniqueness from '../validations/validateUniqueness';
 import validatePresence from '../validations/validatePresence';
 import { UnprocessableEntity } from '../../utils/errors';
@@ -16,7 +16,7 @@ const findGameSession = async (gameSessionId) => {
 
 const service = async ({ gameSessionId, name, answer, link, points = 100 }) => {
   const gameSession = await findGameSession(gameSessionId)
-  await validateName(name);
+  await validateSize('name', name);
   await validateUniqueness(RoundElement, 'name', name);
   await validatePresence('link', link);
   await validatePresence('points', points);

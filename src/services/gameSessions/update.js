@@ -1,5 +1,5 @@
 import { GameSession } from '../../models';
-import validateName from '../validations/validateName';
+import validateSize from '../validations/validateSize';
 import validateUniqueness from '../validations/validateUniqueness';
 import { NotFound } from '../../utils/errors';
 
@@ -9,7 +9,7 @@ const service = async ({ id, name }) => {
     throw new NotFound(`Record with id ${id} not found.`)
   if (name === record.name)
     return record
-  await validateName(name);
+  await validateSize('name', name);
   await validateUniqueness(GameSession, 'name', name);
 
   return await record.update({ name, updatedAt: new Date() });

@@ -1,5 +1,5 @@
 import { GameSession } from '../../models';
-import validateName from '../validations/validateName';
+import validateSize from '../validations/validateSize';
 import validateUniqueness from '../validations/validateUniqueness';
 
 const generateEnterCode = () => {
@@ -7,7 +7,7 @@ const generateEnterCode = () => {
 }
 
 const service = async ({ name }) => {
-  await validateName(name);
+  await validateSize('name', name);
   await validateUniqueness(GameSession, 'name', name);
   const enterCode = generateEnterCode();
   return await GameSession.create({ name, enterCode, status: 'pending', createdAt: new Date(), updatedAt: new Date() });

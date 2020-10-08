@@ -1,5 +1,5 @@
 import { RoundElement } from '../../models';
-import validateName from '../validations/validateName';
+import validateSize from '../validations/validateSize';
 import validateUniqueness from '../validations/validateUniqueness';
 import validatePresence from '../validations/validatePresence';
 import { NotFound } from '../../utils/errors';
@@ -9,7 +9,7 @@ const service = async ({ id, name, answer, link, points = 100 }) => {
   if (!record)
     throw new NotFound(`Record with id ${id} not found.`)
   if (name && name !== record.name) {
-    await validateName(name);
+    await validateSize('name', name);
     await validateUniqueness(RoundElement, 'name', name);
   }
   if (link && link !== record.link)
