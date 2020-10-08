@@ -6,6 +6,10 @@ const schema = `
     id: Int,
     roundElements: [RoundElements]
   }
+
+  type GameSessionMutations {
+    create(name: String!): GameSessions
+  }
 `;
 
 export default schema;
