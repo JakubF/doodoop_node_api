@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     answer: DataTypes.STRING,
     status: DataTypes.STRING,
     points: DataTypes.INTEGER,
-    gameSessionId: DataTypes.INTEGER
+    gameSessionId: DataTypes.INTEGER,
+    link: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'RoundElement',
