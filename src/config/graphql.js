@@ -19,7 +19,8 @@ const doodoopSchema = buildSchema(`
         players(id: Int, name: String, gameSessionId: Int): [Players],
     }
     type Mutation {
-      gameSessionsMutations: GameSessionMutations
+      gameSessionsMutations: GameSessionMutations,
+      roundElementsMutations: RoundElementMutations,
     }
 `);
 // Create an express server and a GraphQL endpoint

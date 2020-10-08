@@ -4,14 +4,14 @@ const schema = `
     answer: String,
     id: Int,
     gameSessionId: Int,
+    points: Int,
     status: String,
     link: String,
     gameSession: GameSessions
   }
 
   type RoundElementMutations {
-    create(name: String!): GameSessions,
-    update(id: Int!, name: String!): GameSessions,
+    create(gameSessionId: Int!, name: String!, link: String!, answer: String!, points: Int): RoundElements,
   }
 `;
 
