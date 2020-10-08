@@ -6,6 +6,8 @@ import create from '../../services/gameSessions/create';
 import update from '../../services/gameSessions/update';
 import start from '../../services/gameSessions/start';
 import join from '../../services/gameSessions/join';
+import gameSessionEntity from '../../entities/gameSession';
+import entityWrapper from '../../utils/entityWrapper';
 
 const mappings = [
   { attribute: 'id', operator: Op.eq },
@@ -17,7 +19,11 @@ const includes = [
   { model: models.RoundElement, required: false, as: 'roundElements' },
   { model: models.Player, required: false, as: 'players' },
 ];
-const resolver = queryResolver(models.GameSession, mappings, includes);
+const baseResolver = queryResolver(models.GameSession, mappings, includes);
+const resolver = async (args, context) => {
+  const results = await baseResolver(args, context);
+  return entityWrapper(results, gameSessionEntity);
+};
 const mutations = {
   create,
   update,
