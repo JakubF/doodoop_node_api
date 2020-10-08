@@ -6,8 +6,8 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class GameSession extends Model {
     static associate(models) {
-      GameSession.hasMany(models.RoundElement, { foreignKey: 'gameSessionId' });
-      GameSession.hasMany(models.Player, { foreignKey: 'gameSessionId' });
+      GameSession.hasMany(models.RoundElement, { foreignKey: 'gameSessionId', as: 'roundElements' });
+      GameSession.hasMany(models.Player, { foreignKey: 'gameSessionId', as: 'players' });
     }
   };
   GameSession.init({
