@@ -1,10 +1,8 @@
+import validatePresence from './validatePresence';
 import { UnprocessableEntity } from '../../utils/errors';
-import { Op } from 'sequelize';
 
 const validateName = async (name) => {
-  if (!name) {
-    throw new UnprocessableEntity({ name: 'must be filled' });
-  }
+  await validatePresence('name', name);
   if (name.length < 5) {
     throw new UnprocessableEntity({ name: 'must be at least 5 characters long' });
   }
