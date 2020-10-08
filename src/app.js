@@ -2,8 +2,9 @@ import cors from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
-import './config/environment.js';
-import graphql from './config/graphql.js';
+import './config/environment';
+import graphql from './config/graphql';
+import models from './models';
 
 const app = express();
 
@@ -29,5 +30,8 @@ app.use(
   morgan('@-- :date[web] -- METHOD_ :method -- URL_ :url -- STATUS_ :status -- RESPONSE_ :response-time[digits]ms')
 );
 app.use('/graphql', graphql);
+app.get('/game_sessions', (req, res) => {
+  models.GameSession.findAll().then((gs) => res.end(JSON.stringify(gs)))
+});
 
 export default app;
