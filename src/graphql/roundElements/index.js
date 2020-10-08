@@ -4,6 +4,7 @@ import models from '../../models';
 import { Op } from 'sequelize';
 import create from '../../services/roundElements/create';
 import update from '../../services/roundElements/update';
+import destroy from '../../services/roundElements/destroy';
 
 const mappings = [
   { attribute: 'id', operator: Op.eq },
@@ -20,6 +21,7 @@ const resolver = queryResolver(models.RoundElement, mappings, includes);
 const mutations = {
   create,
   update,
+  destroy,
 };
 
 export {

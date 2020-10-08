@@ -13,6 +13,7 @@ const schema = `
   type RoundElementMutations {
     create(gameSessionId: Int!, name: String!, link: String!, answer: String!, points: Int): RoundElements,
     update(id: Int!, name: String, link: String, answer: String, points: Int): RoundElements,
+    destroy(id: Int!): Boolean,
   }
 `;
 
