@@ -1,6 +1,7 @@
 const schema = `
   type Answers {
     value: String,
+    id: Int,
     roundElementId: Int,
     playerId: Int,
     roundElement: RoundElements,
@@ -8,7 +9,7 @@ const schema = `
   }
 
   type AnswerMutations {
-    create(playerId: Int!, roundElementId: Int!, value: String!): Answers,
+    create(playerId: Int!, gameSessionId: Int!, value: String!): Answers,
   }
 `;
 
