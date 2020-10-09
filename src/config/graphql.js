@@ -17,6 +17,7 @@ const doodoopSchema = buildSchema(`
         gameSessions(id: Int, name: String, status: String, enterCode: String): [GameSessions],
         roundElements(id: Int, name: String, status: String, answer: String, points: Int, gameSessionId: Int): [RoundElements],
         players(id: Int, name: String, gameSessionId: Int): [Players],
+        answers(id: Int, playerId: Int, roundElementId: Int): [Answers],
     }
     type Mutation {
       gameSessionsMutations: GameSessionMutations,
