@@ -21,7 +21,7 @@ const service = async ({ id }) => {
   const currentRoundElement = await entity.currentRoundElement.update({ status: 'completed', updatedAt: new Date() });
 
   broadcastEvent('songEnded', { id: record.id, roundElementId: entity.currentRoundElement.id });
-  if (entity.areAllRoundElementsCompleted())
+  if (await entity.areAllRoundElementsCompleted())
     completeGameSession({ record });
 
   return currentRoundElement
