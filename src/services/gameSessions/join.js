@@ -1,11 +1,14 @@
 import { GameSession, Player } from '../../models';
 import { NotFound, UnprocessableEntity } from '../../utils/errors';
+import gameSessionEntity from '../../entities/gameSession';
+import { entityWrapper } from '../../utils/entityWrapper';
 
 const findGameSession = async (enterCode) => {
   const gameSession = await GameSession.findOne({ where: { enterCode } });
   if (!gameSession)
     throw new NotFound(`GameSession with enterCode ${enterCode} not found.`);
-  if (gameSession.status !== 'pending')
+  const entity = await entityWrapper(gameSession, gameSessionEntity);
+  if (gameSession.status !== 'pending' && entity.currentRoundElement && entity.currentRoundElement.status !== 'pending')
     throw new UnprocessableEntity('Only pending games can be joined');
 
   return gameSession;
