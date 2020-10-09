@@ -17,7 +17,7 @@ const findGameSession = async (gameSessionId) => {
 const service = async ({ gameSessionId, name, answer, link, points = 100 }) => {
   const gameSession = await findGameSession(gameSessionId)
   await validateSize('name', name);
-  await validateUniqueness(RoundElement, 'name', name);
+  await validateUniqueness(RoundElement, 'name', name, { gameSessionId });
   await validatePresence('link', link);
   await validatePresence('points', points);
   await validatePresence('answer', answer);
