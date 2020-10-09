@@ -2,6 +2,7 @@ import { GameSession } from '../../models';
 import { NotFound, UnprocessableEntity } from '../../utils/errors';
 import gameSessionEntity from '../../entities/gameSession';
 import { entityWrapper } from '../../utils/entityWrapper';
+import completeGameSession from './complete';
 import broadcastEvent from '../../utils/broadcastEvent';
 
 const service = async ({ id }) => {
@@ -21,7 +22,7 @@ const service = async ({ id }) => {
 
   broadcastEvent('songEnded', { id: record.id, roundElementId: entity.currentRoundElement.id });
   if (entity.areAllRoundElementsCompleted())
-    broadcastEvent('gameSessionEnded', { id: record.id });
+    completeGameSession({ record });
 
   return currentRoundElement
 };
