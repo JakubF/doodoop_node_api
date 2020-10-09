@@ -24,7 +24,11 @@ const gameSession = async (record) => {
     }],
   })
  return {
-   currentRoundElement
+   currentRoundElement,
+   areAllRoundElementsCompleted: async () => {
+     const remainingRoundElementsCount = await RoundElement.count({ where: { gameSessionId: record.id, status: { [Op.ne]: 'completed' } } })
+     return remainingRoundElementsCount === 0;
+   }
  }
 }
 

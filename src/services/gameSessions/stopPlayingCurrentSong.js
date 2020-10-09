@@ -17,9 +17,13 @@ const service = async ({ id }) => {
   if (entity.currentRoundElement.status !== 'playing')
     throw new UnprocessableEntity('Round Element is not playing');
 
-  broadcastEvent('songEnded', { id: record.id, roundElementId: entity.currentRoundElement.id });
+  const currentRoundElement = await entity.currentRoundElement.update({ status: 'completed', updatedAt: new Date() });
 
-  return await entity.currentRoundElement.update({ status: 'completed', updatedAt: new Date() });
+  broadcastEvent('songEnded', { id: record.id, roundElementId: entity.currentRoundElement.id });
+  if (entity.areAllRoundElementsCompleted())
+    broadcastEvent('gameSessionEnded', { id: record.id });
+
+  return currentRoundElement
 };
 
 export default service;
