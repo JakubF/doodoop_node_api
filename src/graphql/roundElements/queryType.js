@@ -8,7 +8,8 @@ const schema = `
     status: String,
     link: String,
     gameSession: GameSessions,
-    answers: [Answers]
+    answers: [Answers],
+    winner: Players
   }
 
   type RoundElementMutations {

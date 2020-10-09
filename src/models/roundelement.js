@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       RoundElement.belongsTo(models.GameSession, { foreignKey: 'gameSessionId', as: 'gameSession' });
       RoundElement.hasMany(models.Answer, { foreignKey: 'roundElementId', as: 'answers' });
+      RoundElement.belongsTo(models.Player, { foreignKey: 'winnerId', as: 'winner' });
     }
   };
   RoundElement.init({
@@ -16,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     points: DataTypes.INTEGER,
     gameSessionId: DataTypes.INTEGER,
     link: DataTypes.STRING,
+    winnerId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'RoundElement',
