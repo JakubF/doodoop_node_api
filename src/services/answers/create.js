@@ -20,8 +20,11 @@ const service = async ({ playerId, gameSessionId, value }) => {
     throw new UnprocessableEntity('Game session must be in progress');
 
   const entity = await entityWrapper(gameSession, gameSessionEntity);
+
+  if (!entity.currentRoundElement.status)
+    throw new NotFound('Current song not found');
   if (entity.currentRoundElement.status !== 'playing')
-    throw new UnprocessableEntity('Can only answer current songs');
+    throw new UnprocessableEntity('Can only answer currently playing songs');
 
   const player = await findResource(Player, playerId);
   await validateSize('answer', value, { from: 1, to: 100 });
