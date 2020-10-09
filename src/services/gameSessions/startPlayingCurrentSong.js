@@ -14,12 +14,12 @@ const service = async ({ id }) => {
   const entity = await entityWrapper(record, gameSessionEntity);
   if (!entity.currentRoundElement)
     throw new UnprocessableEntity('Missing round element');
-  if (entity.currentRoundElement.status !== 'pending')
-    throw new UnprocessableEntity('Round Element already started');
+  if (entity.currentRoundElement.status !== 'started')
+    throw new UnprocessableEntity('Round Element is not started');
 
-  broadcastEvent('songSelected', { id: record.id, roundElementId: entity.currentRoundElement.id });
+  broadcastEvent('songStarted', { id: record.id, roundElementId: entity.currentRoundElement.id });
 
-  return await entity.currentRoundElement.update({ status: 'started', updatedAt: new Date() });
+  return await entity.currentRoundElement.update({ status: 'playing', updatedAt: new Date() });
 };
 
 export default service;

@@ -14,6 +14,7 @@ const schema = `
     update(id: Int!, name: String!): GameSessions,
     start(id: Int!): GameSessions,
     startNextSong(id: Int!): RoundElements,
+    startPlayingCurrentSong(id: Int!): RoundElements,
     join(enterCode: String!, name: String!): Players
   }
 `;
