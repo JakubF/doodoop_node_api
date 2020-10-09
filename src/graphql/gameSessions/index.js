@@ -10,6 +10,7 @@ import start from '../../services/gameSessions/start';
 import join from '../../services/gameSessions/join';
 import startNextSong from '../../services/gameSessions/startNextSong';
 import startPlayingCurrentSong from '../../services/gameSessions/startPlayingCurrentSong';
+import stopPlayingCurrentSong from '../../services/gameSessions/stopPlayingCurrentSong';
 
 const mappings = [
   { attribute: 'id', operator: Op.eq },
@@ -33,6 +34,7 @@ const mutations = {
   join,
   startNextSong,
   startPlayingCurrentSong,
+  stopPlayingCurrentSong,
 };
 
 export {

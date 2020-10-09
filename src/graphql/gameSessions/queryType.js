@@ -15,6 +15,7 @@ const schema = `
     start(id: Int!): GameSessions,
     startNextSong(id: Int!): RoundElements,
     startPlayingCurrentSong(id: Int!): RoundElements,
+    stopPlayingCurrentSong(id: Int!): RoundElements,
     join(enterCode: String!, name: String!): Players
   }
 `;
