@@ -7,6 +7,7 @@ const query = `
     gameSessions(id: $id, name: $name, status: $status, enterCode: $enterCode) {
       name
       enterCode
+      id
       status
       currentRoundElement {
         name
@@ -56,18 +57,21 @@ describe('GameSessions all graphql', () => {
             {
               "currentRoundElement": null,
               "enterCode": gameSessions[0].enterCode,
+              "id": gameSessions[0].id,
               "name": gameSessions[0].name,
               "status": gameSessions[0].status
             },
             {
               "currentRoundElement": null,
               "enterCode": gameSessions[1].enterCode,
+              "id": gameSessions[1].id,
               "name": gameSessions[1].name,
               "status": gameSessions[1].status
             },
             {
               "currentRoundElement": null,
               "enterCode": gameSessions[2].enterCode,
+              "id": gameSessions[2].id,
               "name": gameSessions[2].name,
               "status": gameSessions[2].status
             }
@@ -87,6 +91,7 @@ describe('GameSessions all graphql', () => {
             {
               "currentRoundElement": null,
               "enterCode": gameSessions[1].enterCode,
+              "id": gameSessions[1].id,
               "name": gameSessions[1].name,
               "status": gameSessions[1].status
             }
@@ -110,12 +115,14 @@ describe('GameSessions all graphql', () => {
             {
               "currentRoundElement": null,
               "enterCode": gameSessions[0].enterCode,
+              "id": gameSessions[0].id,
               "name": gameSessions[0].name,
               "status": gameSessions[0].status
             },
             {
               "currentRoundElement": null,
               "enterCode": gameSessions[2].enterCode,
+              "id": gameSessions[2].id,
               "name": gameSessions[2].name,
               "status": gameSessions[2].status
             }
@@ -139,12 +146,14 @@ describe('GameSessions all graphql', () => {
             {
               "currentRoundElement": null,
               "enterCode": gameSessions[0].enterCode,
+              "id": gameSessions[0].id,
               "name": gameSessions[0].name,
               "status": gameSessions[0].status
             },
             {
               "currentRoundElement": null,
               "enterCode": gameSessions[2].enterCode,
+              "id": gameSessions[2].id,
               "name": gameSessions[2].name,
               "status": gameSessions[2].status
             }
@@ -164,8 +173,109 @@ describe('GameSessions all graphql', () => {
             {
               "currentRoundElement": null,
               "enterCode": gameSessions[1].enterCode,
+              "id": gameSessions[1].id,
               "name": gameSessions[1].name,
               "status": gameSessions[1].status
+            }
+          ]
+        }
+      });
+    });
+  });
+
+  describe('currentRoundElement', async () => {
+    let roundElements = [];
+
+    beforeEach(async () => {
+      roundElements = [];
+      roundElements.push(await models.RoundElement.create({
+        name: 'game 1 round 1',
+        link: 'test',
+        points: 100,
+        answer: 'test',
+        status: 'pending',
+        gameSessionId: gameSessions[0].id,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }, { transaction: testHelper.getTransaction() }));
+      roundElements.push(await models.RoundElement.create({
+        name: 'game 1 round 2',
+        link: 'test2',
+        points: 100,
+        answer: 'test2',
+        status: 'pending',
+        gameSessionId: gameSessions[0].id,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }, { transaction: testHelper.getTransaction() }));
+      roundElements.push(await models.RoundElement.create({
+        name: 'game 2 round 1',
+        link: 'test3',
+        points: 100,
+        answer: 'test3',
+        status: 'completed',
+        gameSessionId: gameSessions[1].id,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }, { transaction: testHelper.getTransaction() }));
+      roundElements.push(await models.RoundElement.create({
+        name: 'game 3 round 1',
+        link: 'test4',
+        points: 100,
+        answer: 'test4',
+        status: 'completed',
+        gameSessionId: gameSessions[2].id,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }, { transaction: testHelper.getTransaction() }));
+      roundElements.push(await models.RoundElement.create({
+        name: 'game 3 round 2',
+        link: 'test5',
+        points: 100,
+        answer: 'test5',
+        status: 'in_progress',
+        gameSessionId: gameSessions[2].id,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }, { transaction: testHelper.getTransaction() }));
+    });
+
+    it('returns gameSessions with correct roundElements', async () => {
+      const response = await requestHelper.sendRequest({ query });
+      expect(response.statusCode).toEqual(200);
+      expect(response.body).toEqual({
+        "data": {
+          "gameSessions": [
+            {
+              "currentRoundElement": {
+                "name": roundElements[0].name,
+                "link": roundElements[0].link,
+                "status": roundElements[0].status,
+                "id": roundElements[0].id
+              },
+              "enterCode": gameSessions[0].enterCode,
+              "id": gameSessions[0].id,
+              "name": gameSessions[0].name,
+              "status": gameSessions[0].status
+            },
+            {
+              "currentRoundElement": null,
+              "enterCode": gameSessions[1].enterCode,
+              "id": gameSessions[1].id,
+              "name": gameSessions[1].name,
+              "status": gameSessions[1].status
+            },
+            {
+              "currentRoundElement": {
+                "name": roundElements[4].name,
+                "link": roundElements[4].link,
+                "status": roundElements[4].status,
+                "id": roundElements[4].id
+              },
+              "enterCode": gameSessions[2].enterCode,
+              "id": gameSessions[2].id,
+              "name": gameSessions[2].name,
+              "status": gameSessions[2].status
             }
           ]
         }
