@@ -1,12 +1,17 @@
 'use strict';
 
+const cls = require('cls-hooked');
+const namespace = cls.createNamespace('sequelize-doodoop');
+
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
+Sequelize.useCLS(namespace);
+
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require('../config/database.js')[env];
-const db = {};
+const db = { namespace };
 
 let sequelize;
 if (config.use_env_variable) {
