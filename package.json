@@ -2,14 +2,16 @@
   "name": "doodoop_node_api",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "cross-env NODE_ENV=test npx jest --testTimeout=10000",
+    "db:test:prepare": "cross-env NODE_ENV=test npx sequelize db:drop && NODE_ENV=test npx sequelize db:create && NODE_ENV=test npx sequelize db:migrate"
   },
   "author": "Jakub Flasinski",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cls-hooked": "^4.2.2",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -22,5 +24,13 @@
   },
   "_moduleAliases": {
     "@src": "./src"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.15",
+    "cross-env": "^7.0.2",
+    "jest": "^26.6.2",
+    "supertest": "^6.0.0",
+    "ts-jest": "^26.4.3",
+    "typescript": "^4.0.5"
   }
 }
