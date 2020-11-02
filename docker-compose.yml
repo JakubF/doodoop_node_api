@@ -14,7 +14,7 @@ services:
       - db
       - transpiler
     env_file: .env
-    command: sh -c "nodemon --delay 500ms ./dist/server.js"
+    command: sh -c "nodemon --delay 500ms ./dist"
 
   db:
     image: postgres:13.0
