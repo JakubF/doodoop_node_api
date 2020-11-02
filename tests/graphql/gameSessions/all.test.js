@@ -1,52 +1,98 @@
-import request from 'supertest';
-import app from '../../../src/server';
 import models from '../../../src/models';
 import testHelper from '../../testHelper';
+import requestHelper from '../../requestHelper';
+
+const query = `
+  query getGameSessions($id: Int, $name: String, $status: String, $enterCode: String) {
+    gameSessions(id: $id, name: $name, status: $status, enterCode: $enterCode) {
+      name
+      enterCode
+      status
+      currentRoundElement {
+        name
+        link
+        status
+        id
+      }
+    }
+  }
+`;
 
 describe('GameSessions all graphql', () => {
-  beforeEach(() => {
-    models.GameSession.create({ name: 'test 1', enterCode: 'AAA111', status: 'pending', createdAt: new Date(), updatedAt: new Date() }, { transaction: testHelper.getTransaction() })
+  let gameSessions = [];
+
+  beforeEach(async () => {
+    gameSessions = [];
+    gameSessions.push(await models.GameSession.create({
+      name: 'test 1',
+      enterCode: 'AAA111',
+      status: 'pending',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }, { transaction: testHelper.getTransaction() }));
+    gameSessions.push(await models.GameSession.create({
+      name: 'test 2',
+      enterCode: 'BBB222',
+      status: 'in_progress',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }, { transaction: testHelper.getTransaction() }));
+    gameSessions.push(await models.GameSession.create({
+      name: 'test 3',
+      enterCode: 'CCC333',
+      status: 'completed',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }, { transaction: testHelper.getTransaction() }));
   });
 
-  it('returns all records', async () => {
-    models.GameSession.create({ name: 'test 2', enterCode: 'BBB222', status: 'pending', createdAt: new Date(), updatedAt: new Date() })
-    const res = await request(app)
-      .post('/graphql')
-      .send({
-        query: `
-          query getGameSessions {
-            gameSessions {
-              name
-              enterCode
-              status
-              currentRoundElement {
-                name
-                link
-                status
-                id
-              }
+  describe('without any variables', async () => {
+    it('returns all records', async () => {
+      const response = await requestHelper.sendRequest({ query });
+      expect(response.statusCode).toEqual(200);
+      expect(response.body).toEqual({
+        "data": {
+          "gameSessions": [
+            {
+              "currentRoundElement": null,
+              "enterCode": gameSessions[0].enterCode,
+              "name": gameSessions[0].name,
+              "status": gameSessions[0].status
+            },
+            {
+              "currentRoundElement": null,
+              "enterCode": gameSessions[1].enterCode,
+              "name": gameSessions[1].name,
+              "status": gameSessions[1].status
+            },
+            {
+              "currentRoundElement": null,
+              "enterCode": gameSessions[2].enterCode,
+              "name": gameSessions[2].name,
+              "status": gameSessions[2].status
             }
-          }
-        `,
+          ]
+        }
       });
-    expect(res.statusCode).toEqual(200);
-    expect(res.body).toEqual({
-      "data": {
-        "gameSessions": [
-          {
-            "currentRoundElement": null,
-            "enterCode": "AAA111",
-            "name": "test 1",
-            "status": "pending"
-          },
-          {
-            "currentRoundElement": null,
-            "enterCode": "BBB222",
-            "name": "test 2",
-            "status": "pending"
-          }
-        ]
-      }
     });
-  })
+  });
+
+  describe('with id filter', async () => {
+    it('returns gameSession with specified id', async () => {
+      const response = await requestHelper.sendRequest({ query, variables: { id: gameSessions[1].id } });
+      expect(response.statusCode).toEqual(200);
+      expect(response.body).toEqual({
+        "data": {
+          "gameSessions": [
+            {
+              "currentRoundElement": null,
+              "enterCode": gameSessions[1].enterCode,
+              "name": gameSessions[1].name,
+              "status": gameSessions[1].status
+            }
+          ]
+        }
+      });
+    });
+  });
 })
