@@ -124,4 +124,52 @@ describe('GameSessions all graphql', () => {
       });
     });
   });
+
+  describe('with status filter', async () => {
+    beforeEach(async () => {
+      await gameSessions[2].update({ status: 'pending' }, { transaction: testHelper.getTransaction() })
+    });
+
+    it('returns gameSessions with matching status', async () => {
+      const response = await requestHelper.sendRequest({ query, variables: { status: 'pending' } });
+      expect(response.statusCode).toEqual(200);
+      expect(response.body).toEqual({
+        "data": {
+          "gameSessions": [
+            {
+              "currentRoundElement": null,
+              "enterCode": gameSessions[0].enterCode,
+              "name": gameSessions[0].name,
+              "status": gameSessions[0].status
+            },
+            {
+              "currentRoundElement": null,
+              "enterCode": gameSessions[2].enterCode,
+              "name": gameSessions[2].name,
+              "status": gameSessions[2].status
+            }
+          ]
+        }
+      });
+    });
+  });
+
+  describe('with enterCode filter', async () => {
+    it('returns gameSessions with matching enterCode', async () => {
+      const response = await requestHelper.sendRequest({ query, variables: { enterCode: 'BBB222' } });
+      expect(response.statusCode).toEqual(200);
+      expect(response.body).toEqual({
+        "data": {
+          "gameSessions": [
+            {
+              "currentRoundElement": null,
+              "enterCode": gameSessions[1].enterCode,
+              "name": gameSessions[1].name,
+              "status": gameSessions[1].status
+            }
+          ]
+        }
+      });
+    });
+  });
 })
