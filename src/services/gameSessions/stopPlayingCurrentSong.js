@@ -3,7 +3,7 @@ import { NotFound, UnprocessableEntity } from '../../utils/errors';
 import gameSessionEntity from '../../entities/gameSession';
 import { entityWrapper } from '../../utils/entityWrapper';
 import completeGameSession from './complete';
-import broadcastEvent from '../../utils/broadcastEvent';
+import { broadcastEvent } from '../../utils/broadcastEvent';
 
 const service = async ({ id }) => {
   const record = await GameSession.findOne({ where: { id } })

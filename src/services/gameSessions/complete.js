@@ -1,4 +1,4 @@
-import broadcastEvent from '../../utils/broadcastEvent';
+import { broadcastEvent } from '../../utils/broadcastEvent';
 
 const service = async ({ record }) => {
   broadcastEvent('gameSessionEnded', { id: record.id });
