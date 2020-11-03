@@ -6,7 +6,7 @@ import './config/environment';
 import graphql from './config/graphql';
 import models from './models';
 import handleErrors from './middleware/handleErrors';
-import broadcastEvent from './utils/broadcastEvent';
+import { broadcastEvent } from './utils/broadcastEvent';
 import { UnprocessableEntity } from './utils/errors';
 
 const app = express();
@@ -38,5 +38,4 @@ app.get('/game_sessions', (req, res) => {
   models.GameSession.findAll().then((gs) => res.end(JSON.stringify(gs)))
 });
 app.use(handleErrors)
-console.log('testapp')
 export default app;
