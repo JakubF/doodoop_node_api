@@ -77,6 +77,12 @@ describe('GameSessions start mutation', () => {
 
 
     describe('when gameSession is pending', () => {
+      it('broadcasts gameSessionStarted event', async () => {
+        await makeRequest(record.id);
+        expect(broadcastEvent).toHaveBeenCalledTimes(1);
+        expect(broadcastEvent).toHaveBeenCalledWith('gameSessionStarted', { id: record.id });
+      });
+
       it('updates game session', async () => {
         const res = await makeRequest(record.id);
         const reloadedRecord = await models.GameSession.findOne({ where: { id: record.id } });
