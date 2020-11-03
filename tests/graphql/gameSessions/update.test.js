@@ -30,7 +30,7 @@ describe('GameSessions update mutation', () => {
     describe('when GameSession with given id was not found', () => {
       it('returns an error', async () => {
         const res = await makeRequest({ name, id: (record.id + 1) });
-        const reloadedRecord = await models.GameSession.findOne({ id: record.id });
+        const reloadedRecord = await models.GameSession.findOne({ where: { id: record.id } });
         expect(reloadedRecord.name).not.toEqual(name);
         expect(res.body).toEqual({
           "data": {
@@ -51,7 +51,7 @@ describe('GameSessions update mutation', () => {
       describe('when name is unique', () => {
         it('updates game session', async () => {
           const res = await makeRequest({ name, id: record.id });
-          const reloadedRecord = await models.GameSession.findOne({ id: record.id });
+          const reloadedRecord = await models.GameSession.findOne({ where: { id: record.id } });
           expect(res.body).toEqual({
             "data": {
               "gameSessionsMutations": {
@@ -102,7 +102,7 @@ describe('GameSessions update mutation', () => {
 
     it('returns an error', async () => {
       const res = await makeRequest({ name, id: record.id });
-      const reloadedRecord = await models.GameSession.findOne({ id: record.id });
+      const reloadedRecord = await models.GameSession.findOne({ where: { id: record.id } });
       expect(reloadedRecord.name).not.toEqual(name);
       expect(res.body).toEqual({
         "data": {
@@ -124,7 +124,7 @@ describe('GameSessions update mutation', () => {
 
     it('returns an error', async () => {
       const res = await makeRequest({ name, id: record.id });
-      const reloadedRecord = await models.GameSession.findOne({ id: record.id });
+      const reloadedRecord = await models.GameSession.findOne({ where: { id: record.id } });
       expect(reloadedRecord.name).not.toEqual(name);
       expect(res.body).toEqual({
         "data": {
