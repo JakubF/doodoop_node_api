@@ -80,13 +80,13 @@ describe('GameSessions start mutation', () => {
           roundElement = await models.RoundElement.create({ name: 'name', gameSessionId: record.id, status: 'pending' }, { transaction: testHelper.getTransaction() });
         });
 
-        it('broadcasts songSelected event', async () => {
-          await makeRequest(record.id);
-          expect(broadcastEvent).toHaveBeenCalledTimes(1);
-          expect(broadcastEvent).toHaveBeenCalledWith('songSelected', { id: record.id, roundElementId: roundElement.id });
-        });
-
         describe('when it\'s pending', () => {
+          it('broadcasts songSelected event', async () => {
+            await makeRequest(record.id);
+            expect(broadcastEvent).toHaveBeenCalledTimes(1);
+            expect(broadcastEvent).toHaveBeenCalledWith('songSelected', { id: record.id, roundElementId: roundElement.id });
+          });
+
           it('updates round element', async () => {
             const res = await makeRequest(record.id);
             const reloadedRoundElement = await models.RoundElement.findOne({ where: { id: roundElement.id } });
@@ -136,6 +136,30 @@ describe('GameSessions start mutation', () => {
         describe('when it\'s started', () => {
           beforeEach(async () => {
             await roundElement.update({ status: 'started' }, { transaction: testHelper.getTransaction() });
+          });
+          
+          it('returns an error', async () => {
+            const res = await makeRequest(record.id);
+            const reloadedRoundElement = await models.RoundElement.findOne({ where: { id: roundElement.id } });
+            expect(reloadedRoundElement.status).toEqual(roundElement.status);
+            expect(res.body).toEqual({
+              "data": {
+                "gameSessionsMutations": { "startNextSong": null }
+              },
+              "errors": [
+                {
+                  "locations": [{ "column": 7, "line": 4 }],
+                  "message": "Round Element already started",
+                  "path": ["gameSessionsMutations", "startNextSong"]
+                }
+              ]
+            });
+          });
+        });
+
+        describe('when it\'s playing', () => {
+          beforeEach(async () => {
+            await roundElement.update({ status: 'playing' }, { transaction: testHelper.getTransaction() });
           });
           
           it('returns an error', async () => {
