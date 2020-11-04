@@ -2,7 +2,7 @@ import { GameSession, RoundElement } from '../../models';
 import validateSize from '../validations/validateSize';
 import validateUniqueness from '../validations/validateUniqueness';
 import validatePresence from '../validations/validatePresence';
-import { UnprocessableEntity } from '../../utils/errors';
+import { UnprocessableEntity, NotFound } from '../../utils/errors';
 
 const findGameSession = async (gameSessionId) => {
   const gameSession = await GameSession.findOne({ where: { id: gameSessionId } });
@@ -22,7 +22,7 @@ const service = async ({ gameSessionId, name, answer, link, points = 100 }) => {
   await validatePresence('points', points);
   await validatePresence('answer', answer);
 
-  return await RoundElement.create({ name, points, link, status: 'pending', gameSessionId: gameSession.id, createdAt: new Date(), updatedAt: new Date() });
+  return await RoundElement.create({ name, points, answer, link, status: 'pending', gameSessionId: gameSession.id, createdAt: new Date(), updatedAt: new Date() });
 };
 
 export default service;
