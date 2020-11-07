@@ -1,25 +1,49 @@
-import { RoundElement } from '../../models';
+import { RoundElement, GameSession } from '../../models';
 import validateSize from '../validations/validateSize';
 import validateUniqueness from '../validations/validateUniqueness';
 import validatePresence from '../validations/validatePresence';
-import { NotFound } from '../../utils/errors';
+import { NotFound, UnprocessableEntity } from '../../utils/errors';
 
-const service = async ({ id, name, answer, link, points = 100 }) => {
-  const record = await RoundElement.findOne({ where: { id } })
+const findRoundElement = async (id) => {
+  const record = await RoundElement.findOne({ where: { id }, include: [{ model: GameSession, required: false, as: 'gameSession' }] })
   if (!record)
     throw new NotFound(`Record with id ${id} not found.`)
-  if (name && name !== record.name) {
-    await validateSize('name', name);
-    await validateUniqueness(RoundElement, 'name', name);
-  }
-  if (link && link !== record.link)
-    await validatePresence('link', link);
-  if (points && points !== record.points)
-    await validatePresence('points', points);
-  if (answer && answer !== record.answer)
-    await validatePresence('answer', answer);
+  if (record.gameSession.status !== 'pending')
+    throw new UnprocessableEntity('Only pending games can edited');
+  return record
+}
 
-  return await record.update({ name, points, link, updatedAt: new Date() });
+const validateInput = async (record, params) => {
+  const attributes = { updatedAt: new Date() };
+
+  if (params.hasOwnProperty('name') && params.name !== record.name) {
+    await validateSize('name', params.name);
+    await validateUniqueness(RoundElement, 'name', params.name, { gameSessionId: record.gameSessionId });
+    attributes.name = params.name;
+  }
+
+  if (params.hasOwnProperty('link') && params.link !== record.name) {
+    await validatePresence('link', params.link);
+    attributes.link = params.link;
+  }
+
+  if (params.hasOwnProperty('answer') && params.answer !== record.name) {
+    await validatePresence('answer', params.answer);
+    attributes.answer = params.answer;
+  }
+
+  if (params.hasOwnProperty('points') && params.points !== record.name) {
+    await validatePresence('points', params.points);
+    attributes.points = params.points;
+  }
+  return attributes;
+}
+
+const service = async ({ id, ...params }) => {
+  const record = await findRoundElement(id);
+  const attributes = await validateInput(record, params);
+
+  return await record.update(attributes);
 };
 
 export default service;
