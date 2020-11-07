@@ -1,6 +1,7 @@
 import models from '../../../src/models';
 import testHelper from '../../testHelper';
 import requestHelper from '../../requestHelper';
+import { compareGraphqlResults } from '../../graphqlHelper';
 
 const query = `
   query getGameSessions($id: Int, $name: String, $status: String, $enterCode: String) {
@@ -18,6 +19,17 @@ const query = `
     }
   }
 `;
+
+const graphqlMappings = [
+  { source: 'name', target: 'name' },
+  { source: 'enterCode', target: 'enterCode' },
+  { source: 'id', target: 'id' },
+  { source: 'status', target: 'status' },
+  { source: ['currentRoundElement', 'name'], target: ['currentRoundElement', 'name'] },
+  { source: ['currentRoundElement', 'link'], target: ['currentRoundElement', 'link'] },
+  { source: ['currentRoundElement', 'status'], target: ['currentRoundElement', 'status'] },
+  { source: ['currentRoundElement', 'id'], target: ['currentRoundElement', 'id'] },
+];
 
 describe('GameSessions all graphql', () => {
   let gameSessions = [];
@@ -51,33 +63,7 @@ describe('GameSessions all graphql', () => {
     it('returns all records', async () => {
       const response = await requestHelper.sendRequest({ query });
       expect(response.statusCode).toEqual(200);
-      expect(response.body).toEqual({
-        "data": {
-          "gameSessions": [
-            {
-              "currentRoundElement": null,
-              "enterCode": gameSessions[0].enterCode,
-              "id": gameSessions[0].id,
-              "name": gameSessions[0].name,
-              "status": gameSessions[0].status
-            },
-            {
-              "currentRoundElement": null,
-              "enterCode": gameSessions[1].enterCode,
-              "id": gameSessions[1].id,
-              "name": gameSessions[1].name,
-              "status": gameSessions[1].status
-            },
-            {
-              "currentRoundElement": null,
-              "enterCode": gameSessions[2].enterCode,
-              "id": gameSessions[2].id,
-              "name": gameSessions[2].name,
-              "status": gameSessions[2].status
-            }
-          ]
-        }
-      });
+      compareGraphqlResults(gameSessions, graphqlMappings, response.body.data.gameSessions);
     });
   });
 
@@ -85,19 +71,7 @@ describe('GameSessions all graphql', () => {
     it('returns gameSession with specified id', async () => {
       const response = await requestHelper.sendRequest({ query, variables: { id: gameSessions[1].id } });
       expect(response.statusCode).toEqual(200);
-      expect(response.body).toEqual({
-        "data": {
-          "gameSessions": [
-            {
-              "currentRoundElement": null,
-              "enterCode": gameSessions[1].enterCode,
-              "id": gameSessions[1].id,
-              "name": gameSessions[1].name,
-              "status": gameSessions[1].status
-            }
-          ]
-        }
-      });
+      compareGraphqlResults([gameSessions[1]], graphqlMappings, response.body.data.gameSessions);
     });
   });
 
@@ -109,26 +83,7 @@ describe('GameSessions all graphql', () => {
     it('returns gameSessions with matching name', async () => {
       const response = await requestHelper.sendRequest({ query, variables: { name: 'test %' } });
       expect(response.statusCode).toEqual(200);
-      expect(response.body).toEqual({
-        "data": {
-          "gameSessions": [
-            {
-              "currentRoundElement": null,
-              "enterCode": gameSessions[0].enterCode,
-              "id": gameSessions[0].id,
-              "name": gameSessions[0].name,
-              "status": gameSessions[0].status
-            },
-            {
-              "currentRoundElement": null,
-              "enterCode": gameSessions[2].enterCode,
-              "id": gameSessions[2].id,
-              "name": gameSessions[2].name,
-              "status": gameSessions[2].status
-            }
-          ]
-        }
-      });
+      compareGraphqlResults([gameSessions[0], gameSessions[2]], graphqlMappings, response.body.data.gameSessions);
     });
   });
 
@@ -140,26 +95,7 @@ describe('GameSessions all graphql', () => {
     it('returns gameSessions with matching status', async () => {
       const response = await requestHelper.sendRequest({ query, variables: { status: 'pending' } });
       expect(response.statusCode).toEqual(200);
-      expect(response.body).toEqual({
-        "data": {
-          "gameSessions": [
-            {
-              "currentRoundElement": null,
-              "enterCode": gameSessions[0].enterCode,
-              "id": gameSessions[0].id,
-              "name": gameSessions[0].name,
-              "status": gameSessions[0].status
-            },
-            {
-              "currentRoundElement": null,
-              "enterCode": gameSessions[2].enterCode,
-              "id": gameSessions[2].id,
-              "name": gameSessions[2].name,
-              "status": gameSessions[2].status
-            }
-          ]
-        }
-      });
+      compareGraphqlResults([gameSessions[0], gameSessions[2]], graphqlMappings, response.body.data.gameSessions);
     });
   });
 
@@ -167,19 +103,7 @@ describe('GameSessions all graphql', () => {
     it('returns gameSessions with matching enterCode', async () => {
       const response = await requestHelper.sendRequest({ query, variables: { enterCode: 'BBB222' } });
       expect(response.statusCode).toEqual(200);
-      expect(response.body).toEqual({
-        "data": {
-          "gameSessions": [
-            {
-              "currentRoundElement": null,
-              "enterCode": gameSessions[1].enterCode,
-              "id": gameSessions[1].id,
-              "name": gameSessions[1].name,
-              "status": gameSessions[1].status
-            }
-          ]
-        }
-      });
+      compareGraphqlResults([gameSessions[1]], graphqlMappings, response.body.data.gameSessions);
     });
   });
 
@@ -243,43 +167,15 @@ describe('GameSessions all graphql', () => {
     it('returns gameSessions with correct roundElements', async () => {
       const response = await requestHelper.sendRequest({ query });
       expect(response.statusCode).toEqual(200);
-      expect(response.body).toEqual({
-        "data": {
-          "gameSessions": [
-            {
-              "currentRoundElement": {
-                "name": roundElements[0].name,
-                "link": roundElements[0].link,
-                "status": roundElements[0].status,
-                "id": roundElements[0].id
-              },
-              "enterCode": gameSessions[0].enterCode,
-              "id": gameSessions[0].id,
-              "name": gameSessions[0].name,
-              "status": gameSessions[0].status
-            },
-            {
-              "currentRoundElement": null,
-              "enterCode": gameSessions[1].enterCode,
-              "id": gameSessions[1].id,
-              "name": gameSessions[1].name,
-              "status": gameSessions[1].status
-            },
-            {
-              "currentRoundElement": {
-                "name": roundElements[4].name,
-                "link": roundElements[4].link,
-                "status": roundElements[4].status,
-                "id": roundElements[4].id
-              },
-              "enterCode": gameSessions[2].enterCode,
-              "id": gameSessions[2].id,
-              "name": gameSessions[2].name,
-              "status": gameSessions[2].status
-            }
-          ]
-        }
-      });
+      compareGraphqlResults(
+        [
+          { ...gameSessions[0].dataValues, currentRoundElement: roundElements[0] },
+          gameSessions[1],
+          { ...gameSessions[2].dataValues, currentRoundElement: roundElements[4] },
+        ],
+        graphqlMappings,
+        response.body.data.gameSessions
+      );
     });
   });
 })
