@@ -7,7 +7,7 @@ module.exports = {
       'winnerId',
       {
         type: Sequelize.INTEGER,
-        references: { model: 'GameSessions', key: 'id' }
+        references: { model: 'Players', key: 'id' }
       }
     );
   },
