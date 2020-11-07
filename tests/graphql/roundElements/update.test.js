@@ -20,7 +20,7 @@ const query = `
 
 const makeRequest = async (variables) => await requestHelper.sendRequest({ query, variables });
 
-describe('RoundElements create mutation', () => {
+describe('RoundElements update mutation', () => {
   let name, answer, link, points, gameSession, record;
 
   beforeEach(async () => {
