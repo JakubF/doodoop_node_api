@@ -4,5 +4,6 @@ module.exports = {
   coveragePathIgnorePatterns: [
     "/node_modules/"
   ],
+  setupFilesAfterEnv: ["jest-expect-message"],
   verbose: false
 };
