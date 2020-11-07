@@ -17,6 +17,7 @@ const mappings = [
 const includes = [
   { model: models.Answer, required: false, as: 'answers' },
   { model: models.Player, required: false, as: 'winner' },
+  { model: models.GameSession, required: false, as: 'gameSession' },
 ];
 const resolver = queryResolver(models.RoundElement, mappings, includes);
 const mutations = {
