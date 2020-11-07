@@ -1,10 +1,8 @@
-import { RoundElement } from '../../models';
-import { NotFound } from '../../utils/errors';
+import findRoundElement from './utils/findRoundElement';
 
 const service = async ({ id }) => {
-  const record = await RoundElement.findOne({ where: { id } })
-  if (!record)
-    throw new NotFound(`Record with id ${id} not found.`)
+  const record = await findRoundElement(id);
+
   await record.destroy();
   return true;
 };
